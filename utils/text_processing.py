@@ -27,7 +27,7 @@ def extract_point(raw_str: str) -> int:
     num_str = num_list[-1].strip()
     unit_str = unit_list[-1].strip()
     try:
-        return int(num_str) * 60 if unit_str.startswith("h") else 1
+        return int(num_str) * (60 if unit_str.startswith("h") else 1)
     except ValueError:
         if num_str in NUMBER_WORD_DICT:
             return NUMBER_WORD_DICT[num_str] * 60 if unit_str.startswith("h") else 1
@@ -35,4 +35,4 @@ def extract_point(raw_str: str) -> int:
 
 
 if __name__ == "__main__":
-    print(extract_point("Test test for three an hours"))
+    print(extract_point("Sweep the floor for 15 minutes"))

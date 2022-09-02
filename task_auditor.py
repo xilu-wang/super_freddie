@@ -15,7 +15,8 @@ def main(notion_token: str, notion_db_id: str, day: int):
     count = defaultdict(lambda: 0)
     for o in obj:
         count[o.owner] += o.process_raw_log().point
-    print(count.items())
+    for k, v in count.items():
+        print(f"{k} has earned {v} points!")
 
 
 if __name__ == "__main__":
