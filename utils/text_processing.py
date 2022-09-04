@@ -17,10 +17,16 @@ NUMBER_WORD_DICT = {
 DEFAULT_POINT = 15
 
 
+def pre_process(raw_str):
+    lower = raw_str.lower()
+    # remove for ... for
+    return re.sub(r"(?=for)(.*)(?=for)", "", lower)
+
+
 def extract_point(raw_str: str) -> int:
-    l_raw = raw_str.lower()
-    num_list = re.findall(r"(?<=for)(.*)(?=minutes|minute|hour|hours)", l_raw)
-    unit_list = re.findall(r"minutes|minute|hour|hours", l_raw)
+    pre_processed = pre_process(raw_str)
+    num_list = re.findall(r"(?<=for)(.*)(?=minutes|minute|hour|hours)", pre_processed)
+    unit_list = re.findall(r"minutes|minute|hour|hours", pre_processed)
     if not num_list:
         return DEFAULT_POINT
 
@@ -30,9 +36,9 @@ def extract_point(raw_str: str) -> int:
         return int(num_str) * (60 if unit_str.startswith("h") else 1)
     except ValueError:
         if num_str in NUMBER_WORD_DICT:
-            return NUMBER_WORD_DICT[num_str] * 60 if unit_str.startswith("h") else 1
+            return NUMBER_WORD_DICT[num_str] * (60 if unit_str.startswith("h") else 1)
         return DEFAULT_POINT
 
 
 if __name__ == "__main__":
-    print(extract_point("Sweep the floor for 15 minutes"))
+    print(extract_point("Put paper tower inch kitchen for five minutes"))
